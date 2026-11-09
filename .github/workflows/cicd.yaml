@@ -85,7 +85,7 @@ jobs:
           IMAGE="$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
           echo "Building Docker image..."
-          docker build -t "$IMAGE" .
+          docker build -f Dockerfile -t "$IMAGE" .
 
           echo "Pushing image to Amazon ECR..."
           docker push "$IMAGE"
