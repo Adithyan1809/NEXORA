@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     embed_dim:int=1024
     max_upload_bytes:int=10485760
     pinecone_api_key:str=''
-    pinecone_index_name:str='atlas-enterprise-ai-index'
+    pinecone_index_name:str='nexora-enterprise-ai-index'
     pinecone_cloud:str='aws'
     pinecone_region:str='ap-south-1'
     pinecone_ready_timeout:int=180
