@@ -1,3 +1,5 @@
 .env
 venv
 .gitignore
+config_test.py
+app/__pycache__/
