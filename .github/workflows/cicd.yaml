@@ -100,7 +100,7 @@ jobs:
     name: Continuous Deployment
     needs: build-and-push-ecr-image
 
-    runs-on: [self-hosted, linux, x64, nexora-ec2]
+    runs-on: [self-hosted, linux, x64, nexora]
     environment: production
 
     steps:
