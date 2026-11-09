@@ -293,6 +293,7 @@ jobs:
             -e RIUS_CAPTURE_CONTENT \
             -e HITL_ENABLED \
             -e MEMORY_TURNS \
+            -p 80:8000 \
             -p 8000:8000 \
             "$IMAGE"
 
