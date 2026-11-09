@@ -1,4 +1,3 @@
-
 name: Nexora Enterprise AI CI/CD
 
 on:
@@ -68,13 +67,20 @@ jobs:
       - name: Build and Push Docker Image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME || vars.ECR_REPOSITORY_NAME || 'nexora-enterprise-ai' }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           set -euo pipefail
 
-          test -n "$ECR_REGISTRY"
-          test -n "$ECR_REPOSITORY"
+          if [ -z "$ECR_REGISTRY" ]; then
+            echo "::error::ECR_REGISTRY is empty. Amazon ECR login may have failed."
+            exit 1
+          fi
+
+          if [ -z "$ECR_REPOSITORY" ]; then
+            echo "::error::ECR_REPOSITORY is empty. Please configure ECR_REPOSITORY_NAME in GitHub Secrets or Variables."
+            exit 1
+          fi
 
           IMAGE="$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
 
@@ -121,7 +127,7 @@ jobs:
         id: image
         env:
           AWS_REGION: ${{ secrets.AWS_REGION }}
-          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME || vars.ECR_REPOSITORY_NAME || 'nexora-enterprise-ai' }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           set -euo pipefail
