@@ -15,5 +15,7 @@
             "database": "nexora_ai_dy7k",
             "username": "nexora_ui"
         }
-    ]
+    ],
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda"
 }
