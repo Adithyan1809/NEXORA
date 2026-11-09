@@ -315,11 +315,16 @@ jobs:
             exit 1
           fi
 
-          curl --fail --silent --show-error \
+          if ! curl --fail --silent --show-error \
             --retry 5 \
             --retry-delay 3 \
             http://127.0.0.1:8000/ \
-            > /dev/null
+            > /dev/null; then
+
+            echo "::error::Health check failed! Showing container logs:"
+            docker logs --tail 100 nexora-enterprise-ai
+            exit 1
+          fi
 
           echo "nexora Enterprise AI deployed successfully"
 

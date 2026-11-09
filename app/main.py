@@ -40,10 +40,13 @@ class Feedback(BaseModel):
 
 
 
-@app.get('/',response_class=HTMLResponse)
-def home(request:Request):
-    return templates.TemplateResponse('index.html',{'request':request,'region':settings().aws_region,
-        'mode':'single-workspace demo'})
+@app.get('/', response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name='index.html',
+        context={'region': settings().aws_region, 'mode': 'single-workspace demo'}
+    )
 
 
 
