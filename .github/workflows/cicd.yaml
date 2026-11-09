@@ -117,6 +117,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
+        id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       # ----------------------------------------
@@ -126,22 +127,21 @@ jobs:
       - name: Construct ECR Image URI
         id: image
         env:
-          AWS_REGION: ${{ secrets.AWS_REGION }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME || vars.ECR_REPOSITORY_NAME || 'nexora-enterprise-ai' }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
           set -euo pipefail
 
-          ACCOUNT_ID=$(aws sts get-caller-identity \
-            --query Account \
-            --output text)
+          if [ -z "$ECR_REGISTRY" ]; then
+            echo "::error::ECR_REGISTRY is empty. Amazon ECR login may have failed."
+            exit 1
+          fi
 
-          REGISTRY="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com"
-
-          IMAGE="${REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
+          IMAGE="${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}"
 
           echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
-          echo "ECR image URI constructed successfully"
+          echo "ECR image URI constructed successfully: $IMAGE"
 
       # ----------------------------------------
       # PULL IMAGE
