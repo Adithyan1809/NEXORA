@@ -6,7 +6,7 @@ from app.config import settings
 
 @contextmanager
 def connection():
-    #Establishes and manages a database connection.
+    # Establishes and manages a database connection.
     # Render provides a PostgreSQL connection URL. Prefer its external URL
     # for a FastAPI process running on your computer.
     url = settings().database_url
@@ -16,8 +16,8 @@ def connection():
         yield conn
 
 def audit(conn, actor, tenant, action, detail):
-    #Records activities performed in your application.
+    # Records activities performed in your application.
     conn.execute(
-        'INSERT INTO audit_events (actor,tenant_id,action,detail) VALUES (%s,%s,%s,%s)',
+        'INSERT INTO audit_events (actor,tenant_id,action,detail) VALUES (%s,%s,%s,%s::jsonb)',
         (actor, tenant, action, json.dumps(detail))
     )

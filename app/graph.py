@@ -85,4 +85,4 @@ graph=make_graph()
 @trace("chat")
 def chat(p,question,history=None):
     r=graph.invoke({'principal':p,'question':question,'history':history or []})
-    return {'answer':r['answer'],'sources':r.get('sources',[]),'status':r.get('status','answered')}
+    return {'answer':r.get('answer',''),'sources':r.get('sources',[]),'status':r.get('status','answered')}

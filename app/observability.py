@@ -5,8 +5,14 @@ from functools import wraps
 
 log = logging.getLogger(__name__)
 
+_initialized = False
+
 def initialize():
     """Call once, before instrumented app modules are loaded."""
+    global _initialized
+    if _initialized:
+        return
+    _initialized = True
     from dotenv import load_dotenv
     load_dotenv()
     if not os.getenv("RIUS_API_KEY") or os.getenv("RIUS_DISABLED", "false").lower() in ("1", "true", "yes"):
